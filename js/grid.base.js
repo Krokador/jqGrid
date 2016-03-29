@@ -2804,9 +2804,14 @@ $.fn.jqGrid = function( pin ) {
 		},
 		multiSort = function(iCol, obj, sor ) {
 			var cm = ts.p.colModel,
-					selTh = ts.p.frozenColumns ?  obj : ts.grid.headers[iCol].el, so="", sn;
+					selTh = obj, so="", sn, 
+					fObj = ts.grid.fhDiv.find("#" + selTh.id);
 			$("span.ui-grid-ico-sort",selTh).addClass(disabled);
 			$(selTh).attr("aria-selected","false");
+			if (fObj.length > 0){
+				$("span.ui-grid-ico-sort", fObj).addClass(disabled);
+				$(fObj).attr("aria-selected", "false");
+			}
 			sn = (cm[iCol].index || cm[iCol].name);
 			if ( typeof sor == "undefined" )
 			{
@@ -2831,9 +2836,17 @@ $.fn.jqGrid = function( pin ) {
 				$("span.s-ico",selTh).show();
 				$("span.ui-icon-"+so,selTh).removeClass(disabled);
 				$(selTh).attr("aria-selected","true");
+				if (fObj.length > 0){
+					fObj.find("span.s-ico").show();
+					fObj.find("span.ui-icon-" + so).removeClass(disabled);
+					fObj.attr("aria-selected", "true");
+				}
 			} else {
 				if(!ts.p.viewsortcols[0]) {
 					$("span.s-ico",selTh).hide();
+					if (fObj.length > 0){
+						fObj.find("span.s-ico").hide();
+					}
 				}
 			}
 			var isn = sortarr.indexOf( sn );
